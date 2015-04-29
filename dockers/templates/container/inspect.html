@@ -1,0 +1,57 @@
+{%extends 'container/base.html'%}
+{%block right%}
+<script type="text/javascript">
+    $(function(){
+        $("#f_c").attr('class', 'active');
+    })
+</script>
+{{msg}}<br>
+<div  role="form"  class="form-horizontal">
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">容器名</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="">{{obj.Name}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">容器ID</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="">{{dbinfo.id}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">宿主机</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="">{{dbinfo.host}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">IP地址</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="">{{dbinfo.network_ipv4}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">ssh login name</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="">{{dbinfo.login_name}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">ssh login pwd</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="">{{dbinfo.login_pwd}}</span>
+        </div>
+    </div>
+    {%for o in obj.items%}
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{o.0}}</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="height:auto;min-height:34px">{{o.1}}</span>
+        </div>
+    </div>
+    {%endfor%}
+    
+</div>
+
+{%endblock right%}

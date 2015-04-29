@@ -1,0 +1,23 @@
+{%extends 'base.html'%}
+
+{%block main%}
+<script type="text/javascript">
+    $(function(){
+        $("#f_i").attr('class', 'active');
+    })
+</script>
+<div class="row">
+    <div class="col-md-1 col-sm-1">
+        <div class="sidebar">
+            <ul class="nav nav-sidebar">
+                <li id="s_list"><a href="/docker/images">镜像列表</a></li>
+              <!--   <li id="s_create"><a href="/docker/build_image">创建镜像</a></li> -->
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-11 col-sm-11">
+{%block right%}
+{%endblock right%}
+    </div>
+</div>
+{%endblock main%}

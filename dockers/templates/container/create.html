@@ -1,0 +1,194 @@
+{%extends 'container/base.html'%}
+{%block right%}
+<script type="text/javascript">
+    $(function(){
+        $("#s_create").attr('class', 'active');
+    })
+</script>
+<form  role="form"  class="form-horizontal"  method="post" action="" onsubmit ="getElementById('submit_btn').disabled=true;getElementById('submit_btn').value='正在提交...';return true;">
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">名称</label>
+        <div class="col-sm-9">
+            <input name="name" class="form-control" value="" style="display:inline;width:auto">
+            *
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">宿主机</label>
+        <div class="col-sm-9">
+            <select name="hostname" class="form-control" style="display:inline;width:auto">
+                <option value="" selected="selected">----</option>
+                {%for host in hosts%}
+                <option value="{{host.name}}" >{{host.name}}</option>
+                {%endfor%}
+            </select> 
+            *
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label">镜像</label>
+        <div class="col-sm-9">
+            <select name="image" class="form-control" style="display:inline;width:auto"></select>
+            *
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label">网段</label>
+        <div class="col-sm-9">
+            <select id="ipv4pool" name="ipv4pool" class="form-control" style="display:inline;width:auto">
+                <option value="" selected="">--</option>
+                {%for p in pools%}
+                <option value="{{p.pk}}">{{p.net}}/{{p.size}} （{{p.start_ip}} ~ {{p.end_ip}}）</option>    
+                {%endfor%}
+            </select> 
+            *
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label">IP</label>
+        <div class="col-sm-9">
+            <select name="ip" class="form-control" style="display:inline;width:auto"></select>
+            *
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label">端口</label>
+        <div class="col-sm-9">
+            <input name="port" class="form-control" value="" style="display:inline;width:auto">
+            格式要求：  22;80:8080;0.0.0.0:80:8080
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label">卷</label>
+        <div class="col-sm-9">
+            <input name="volume" class="form-control" value="" style="display:inline;width:auto">
+            格式要求：  /host_path/:/container_path/; /host_path/:/container_path/:ro
+            
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label">CMD</label>
+        <div class="col-sm-9">
+            <input name="cmd" class="form-control" value="" style="display:inline;width:auto">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label">CPU权重</label>
+        <div class="col-sm-9">
+            <input name="cpu" class="form-control" value="" style="display:inline;width:auto">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label">内存配额</label>
+        <div class="col-sm-9">
+            <input name="mem" class="form-control" value="" style="display:inline;width:auto"> 
+            单位（b, k, m, g）
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label">交换区配额</label>
+        <div class="col-sm-9">
+            <input name="swap" class="form-control" value="" style="display:inline;width:auto"> 
+            单位（b, k, m, g）
+        </div>
+    </div>
+    <!-- <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label">磁盘配额</label>
+        <div class="col-sm-9">
+            <input name="disk" class="form-control" value="" style="display:inline;width:auto"> 
+            单位（Ki, Mi, Gi, Ti, Pi, Ei）
+        </div>
+    </div> -->
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label">账户</label>
+        <div class="col-sm-9">
+            <span class="form-control" style="display:inline;width:auto">{{defaultuser}}</span> 
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label">密码</label>
+        <div class="col-sm-9">
+            <input name="passwd" class="form-control" value="" style="display:inline;width:auto"> 
+            不设置密码则系统自动生成6位登陆密码。
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label"></label>
+        <div class="col-sm-9">
+            <input id="submit_btn" class="form-control btn btn-primary" value="提交" type="submit" style="display:inline;width:auto"> 
+           
+        </div>
+    </div>
+
+
+
+</form>
+<script type="text/javascript">
+$(function(){
+    {%if result%}
+    alert('{{result}}');
+    {%endif%}
+    {%if data%}
+    $('input[name="name"]').val('{{data.name}}');
+    $('select[name="hostname"]').val('{{data.hostname}}');
+    get_images();
+    $('select[name="ipv4pool"]').val('{{data.ipv4pool}}');
+    get_ips();
+    $('input[name="port"]').val('{{data.port|default_if_none:''}}');
+    $('input[name="volume"]').val('{{data.volume|default_if_none:''}}');
+    $('input[name="cmd"]').val('{{data.cmd|default_if_none:''}}');
+    $('input[name="cpu"]').val('{{data.cpu|default_if_none:''}}');
+    $('input[name="mem"]').val('{{data.mem|default_if_none:''}}');
+    $('input[name="swap"]').val('{{data.swap|default_if_none:''}}');
+    //$('input[name="disk"]').val('{{data.disk}}');
+    $('input[name="passwd"]').val('{{data.passwd|default_if_none:''}}');
+    {%endif%}
+
+    $('select[name="hostname"]').change(get_images);
+    $("#ipv4pool").change(get_ips);
+
+
+
+    function get_images() {
+        var hostname = $('select[name="hostname"]').val();
+        $.ajax({
+            url: '/docker/ajax_get_images',
+            data: {'host': hostname},
+            type:'get',
+            success:function(data) {
+                var options = '';
+                for (var i in data.obj_list) {
+                    options += '<option value="' + data.obj_list[i].Id + '">' + data.obj_list[i].RepoTags[0] + '</option>';
+                }
+                $('select[name="image"]').html(options);
+                {%if result%}
+                    $('select[name="image"]').val('{{data.image}}');
+                {%endif%}
+            },
+            error: function(data) {
+            }
+        })
+    }
+    function get_ips() {
+        var pool = $('select[name="ipv4pool"]').val();
+        $.ajax({
+            url: '/network/ajax_get_free_ip_range',
+            data: {'pool': pool},
+            type:'get',
+            success:function(data) {
+                var html = ''
+                for (var i in data.data) {
+                    html = html + "<option value='" + data.data[i] + "'>" + data.data[i] + "</option>";
+                }
+                $('select[name="ip"]').html(html);
+                {%if result %}
+                     $('select[name="ip"]').val('{{data.ip}}');
+                {%endif%}
+            },
+            error: function(data) {
+            }
+        })
+    }
+});
+</script>
+{%endblock right%}

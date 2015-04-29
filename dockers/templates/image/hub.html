@@ -1,0 +1,41 @@
+{%extends 'base.html'%}
+{%block main%}
+<script type="text/javascript">
+    $(function(){
+        $("#f_hub").attr('class', 'active');
+    })
+</script>
+<h3>
+    <div align="center">
+    <form method="get" action="">
+        <input name="q" value="{{res.query|default_if_none:''}}">
+        <input type="submit" value="query">
+    </form>
+    </div>
+    <div style="float:right">
+        <button type="button" class="btn btn-primary" onclick="javascript:window.location.href='/docker/build_image'">创建镜像</button>
+    </div>
+</h3>
+
+<p>find {{res.num_results}} results</p>
+<table class="table">
+        <tr>
+            <th></th>
+            <th>镜像名称</th>
+            <th>tags</th>
+            <th>说明</th>
+            <th></th>
+        </tr>
+{%for r in res.results%}
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{r.name}}</td>
+        <td>{%for tag in r.tags%}{{tag}}<br>{%endfor%}</td>
+        <td>{{r.description}}</td>
+        <td>
+            <button class="btn btn-xs btn-primary" onclick="window.location.href='/docker/pull?image={{r.name}}&tag={{r.tag}}'" title="将镜像从仓库下载到指定宿主机">下载</button>
+        </td>
+    </tr>
+{%endfor%}
+</table>
+{%endblock main%}

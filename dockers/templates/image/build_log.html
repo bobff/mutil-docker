@@ -1,0 +1,21 @@
+{%extends 'image/base.html'%}
+{%block right%}
+<script type="text/javascript">
+    $(function(){
+        $("#s_create").attr('class', 'active');
+    })
+</script>
+<script type="text/javascript">
+    $(function(){
+        $("#f_hub").attr('class', 'active');
+    })
+
+    function myrefresh(){
+        window.location.reload();
+    }
+    setTimeout('myrefresh()',5000); 
+</script>
+
+{{res|linebreaks }}
+
+{%endblock right%}

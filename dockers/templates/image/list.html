@@ -1,0 +1,61 @@
+{%extends 'image/base.html'%}
+{%block right%}
+<script type="text/javascript">
+    $(function(){
+        $("#s_list").attr('class', 'active');
+    })
+</script>
+<h3>
+    <span>镜像列表</span>
+    <!-- <div style="float:right">
+    <button type="button" class="btn btn-primary" onclick="javascript:window.location.href='/docker/build_image'">创建镜像</button>
+    </div> -->
+</h3>
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Host</th>
+        <!-- <th>size</th> -->
+        <!-- <th>created</th> -->
+        <th>virtualSize</th>
+        <th>parentID</th>
+        <th>ImageTag</th>
+        <th></th>
+    </tr>
+{%for image in images%}
+    <tr>
+        <td>{{image.Id|slice:'3'}}</td>
+        <td>{{image.hostname}}</td>
+       <!--  <td>{{image.Size}}</td> -->
+       <!--  <td>{{image.Created}}</td> -->
+        <td>{{image.VirtualSize|filesizeformat }}</td>
+        <td>{{image.ParentId|slice:'3'}}</td>
+        <td>{{image.repotag}}</td>
+        <td>
+            <button class="btn btn-xs btn-info" onclick="window.location.href='/docker/inspect_image?id={{image.Id}}&host={{image.hostname}}'" title="查看镜像的详细信息"> 详情 </button>
+            <button class="btn btn-xs btn-danger" onclick="javascript:if(confirm('确定？'))remove_image('{%if image.repotag == '<none>:<none>'%}{{image.Id}}{%else%}{{image.regrepotag}}{%endif%}','{{image.hostname}}')" title="删除镜像"> 删除 </button>
+            <button class="btn btn-xs btn-primary" onclick="window.location.href='/docker/push?id={{image.Id}}&host={{image.hostname}}'" title="将镜像推送到私有仓库"> 推送 </button>
+        </td>
+    </tr>   
+
+{%endfor%}
+</table>
+<script type="text/javascript">
+function remove_image(id, hostname) {
+    $.ajax({
+            url: '/docker/ajax_remove_image',
+            data: {'host': hostname, 'id':id},
+            type:'post',
+            success:function(data) {
+                if (data.msg != undefined){
+                    alert(data.msg);
+                }
+                window.location.reload();
+            },
+            error:function(data) {
+                alert(data.msg)
+            }
+        })
+}
+</script>
+{%endblock right%}

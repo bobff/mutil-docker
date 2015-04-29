@@ -1,0 +1,46 @@
+{%extends 'base.html'%}
+{%block main%}
+<script type="text/javascript">
+    $(function(){
+        $("#f_i").attr('class', 'active');
+    })
+</script>
+<form  role="form"  class="form-horizontal"  method="post" action="" onsubmit ="getElementById('submit_btn').disabled=true;getElementById('submit_btn').value='正在提交...';return true;">
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">镜像ID</label>
+        <div class="col-sm-9" style="height:34px;padding-top:7px">
+            <span class="form-control" style="display:inline;width:auto;height:auto">{{id}}</span>
+            <input hidden name="id"  value="{{id}}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">宿主机</label>
+        <div class="col-sm-9" style="height:34px;padding-top:7px">
+            <span class="form-control" style="display:inline;width:auto;height:auto">{{hostname}}</span>
+            <input hidden name="host"  value="{{hostname}}">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">repository</label>
+        <div class="col-sm-9" style="height:34px;padding-top:7px">
+            <span class="form-control" style="display:inline;width:auto;height:auto">{{obj.repo}}</span>
+           <!--  <input hidden name="obj.repo"  value="{{obj.repo}}"> -->
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">tag</label>
+        <div class="col-sm-9" style="height:34px;padding-top:7px">
+            <span class="form-control" style="display:inline;width:auto;height:auto">{{obj.tag}}</span>
+            <!-- <input hidden name="obj.tag"  value="{{obj.tag}}"> -->
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label"></label>
+        <div class="col-sm-9">
+            <input class="btn btn-primary" type="submit" value="上传" class="form-control" style="display:inline;width:auto">
+        </div>
+    </div>
+</form>
+
+{%endblock main%}

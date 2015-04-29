@@ -1,0 +1,16 @@
+{%extends 'base.html'%}
+{%block main%}
+<script type="text/javascript">
+    $(function(){
+        $("#f_hub").attr('class', 'active');
+    })
+
+    function myrefresh(){
+        window.location.reload();
+    }
+    setTimeout('myrefresh()',5000); 
+</script>
+
+{{res|linebreaks }}
+
+{%endblock main%}

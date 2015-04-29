@@ -1,0 +1,7 @@
+<uwsgi>  
+    <socket>127.0.0.1:3033</socket>  
+    <chdir>/home/bobfu/work/run/mutil_docker</chdir>  
+    <pythonpath>/home/bobfu/work/run/mutil_docker</pythonpath>  
+    <module>wsgi</module>  
+    <daemonize>/var/log/uwsgi/mutil_docker.log</daemonize>  
+</uwsgi> 

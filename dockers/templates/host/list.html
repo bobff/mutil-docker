@@ -1,0 +1,83 @@
+{%extends 'base.html'%}
+{%block main%}
+<script type="text/javascript">
+    $(function(){
+        $("#f_h").attr('class', 'active');
+    })
+</script>
+<h3>
+    <span>主机列表</span>
+    <div style="float:right">
+    
+    </div>
+</h3>
+<table class="table">
+    <tr>
+        <th>name</th>
+        <th>ipv4</th>
+        <th>docker_version</th>
+        <th>api_version</th>
+        <th>kernel</th>
+        <th>Driver</th>
+        <th>Images</th>
+        <th>Containers</th>
+        <th>OperatingSystem</th>
+        <th>status</th>
+    </tr>
+    {%for item in obj_list%}
+    <tr>
+        <td>{{item.name}}</td>
+        <td>{{item.ipv4}}</td>
+        <td>{{item.docker_v}}</td>
+        <td>{{item.api_v}}</td>
+        <td>{{item.kernel}}</td>
+        <td>{{item.info.Driver}}</td>
+        <td>{{item.info.Images}}</td>
+        <td>{{item.info.Containers}}</td>
+        <td>{{item.info.OperatingSystem}}</td>
+        <td>{{item.get_status}}</td>
+    </tr>
+    {%endfor%}
+</table>
+<script type="text/javascript">
+function remove_container(id, hostname) {
+    $.ajax({
+            url: '/docker/ajax_remove_container',
+            data: {'host': hostname, 'id':id},
+            type:'post',
+            success:function(data) {
+                window.location.reload();
+            },
+            error:function(data) {
+                alert(data.res)
+            }
+        })
+}
+function start_container(id, hostname) {
+    $.ajax({
+            url: '/docker/ajax_start_container',
+            data: {'host': hostname, 'id':id},
+            type:'post',
+            success:function(data) {
+                window.location.reload();
+            },
+            error:function(data) {
+                alert(data.res)
+            }
+        })
+}
+function stop_container(id, hostname) {
+    $.ajax({
+            url: '/docker/ajax_stop_container',
+            data: {'host': hostname, 'id':id},
+            type:'post',
+            success:function(data) {
+                window.location.reload();
+            },
+            error:function(data) {
+                alert(data.res)
+            }
+        })
+}
+</script>
+{%endblock main%}

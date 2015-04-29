@@ -1,0 +1,144 @@
+{%extends 'container/base.html'%}
+{%block right%}
+<script type="text/javascript">
+    $(function(){
+        $("#s_list").attr('class', 'active');
+    })
+</script>
+<h3>
+    <span>容器列表</span>
+</h3>
+<table class="table" >
+    <tr>
+        <th>Id</th>
+        <th>name</th>
+        <th>IP</th>
+        <th>Host</th>
+        <th>image</th>
+        <!-- <th>CMD</th> -->
+        <!-- <th>cpu_share</th>
+        <th>mem</th>
+        <th>disk</th> -->
+        <th>到期时间</th>
+        <th>status</th>
+        <th></th>
+    </tr>
+    {%for item in obj_list%}
+    <tr id="tr_{{item.Id}}">
+        <td>{{item.Id|slice:'3'}}</td>
+        <td>{{item.Names.0}}</td>
+        <td>{{item.info.network_ipv4}}</td>
+        <td>{{item.hostname}}</td>
+        <td>{{item.repotag}}</td>
+       <!--  <td>{{item.Command}}</td> -->
+        <!-- <td>{{item.info.cpu_share|default_if_none:''}}</td>
+        <td>{{item.info.mem_limit|default_if_none:''}}</td>
+        <td>{{item.info.disk_limit|default_if_none:''}}</td> -->
+        <td>{{item.info.end_date|date:'Y-m-d'}}</td>
+        <td>{{item.Status|truncatewords:1|cut:'...'}}</td>
+        <td>
+        <div id="op_todo_{{item.Id}}">
+        <div class="btn-group">
+            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                管理容器<span class="caret"></span></button>
+            <ul class="dropdown-menu" role="menu">
+                <div class="button-group">
+                    <button class="btn btn-xs btn-primary" onclick="start_container('{{item.Id}}','{{item.hostname}}')" title="启动容器">启动</button>
+                    <button class="btn btn-xs btn-warning" onclick="pause_container('{{item.Id}}','{{item.hostname}}')" title="挂起容器">挂起</button>
+                    <button class="btn btn-xs btn-warning" onclick="if(confirm('确定？'))stop_container('{{item.Id}}','{{item.hostname}}')" title="停止容器">停止</button>
+                    <button class="btn btn-xs btn-danger" onclick="if(confirm('确定？'))remove_container('{{item.Id}}','{{item.hostname}}')" title="删除容器">删除</button>
+                </div>
+                
+                <button class="btn btn-xs btn-info" onclick="javascript:window.location.href='/docker/inspect_container?id={{item.Id}}&host={{item.hostname}}'" title="查看容器的详细信息"> 详情 </button>
+                
+                <button class="btn btn-xs btn-default" onclick="javascript:window.location.href='/docker/logs?id={{item.Id}}&host={{item.hostname}}'" title="查看容器的运行日志">日志</button>
+                <button class="btn btn-xs btn-primary" onclick="javascript:window.location.href='/docker/commit?id={{item.Id}}&host={{item.hostname}}&image={{item.Image}}'" title="基于该容器创建镜像">提交</button>
+            </ul>
+        </div>
+        </div>
+        <div id="op_doing_{{item.Id}}"> <div class="btn-group">
+            <span class="btn btn-default btn-sm dropdown-toggle" >
+                处理中 …</span>
+            </div>
+        </div>
+        </td>
+    </tr>
+    {%endfor%}
+</table>
+<script type="text/javascript">
+$(function(){
+    $("div[id^='op_todo_']").show();
+    $("div[id^='op_doing_']").hide();  
+})
+function op_doing(id) {
+    $("#op_todo_"+id).hide();
+    $("#op_doing_"+id).show();  
+}
+function op_todo(id) {
+    $("#op_todo_"+id).show();
+    $("#op_doing_"+id).hide();  
+}
+function remove_container(id, hostname) {
+    op_doing(id);
+    $.ajax({
+            url: '/docker/ajax_remove_container',
+            data: {'host': hostname, 'id':id},
+            type:'post',
+            success:function(data) {
+                if (data.res == true) {
+                    $("#tr_"+id).remove();
+                }
+            },
+            error:function(data) {
+                alert(data.res);
+                op_todo(id);
+            }
+        })
+}
+function start_container(id, hostname) {
+    op_doing(id);
+    $.ajax({
+            url: '/docker/ajax_start_container',
+            data: {'host': hostname, 'id':id},
+            type:'post',
+            success:function(data) {
+                window.location.reload();
+            },
+            error:function(data) {
+                alert(data.res);
+                op_todo(id);
+            }
+        })
+}
+function stop_container(id, hostname) {
+    op_doing(id);
+    $.ajax({
+            url: '/docker/ajax_stop_container',
+            data: {'host': hostname, 'id':id},
+            type:'post',
+            success:function(data) {
+                window.location.reload();
+            },
+            error:function(data) {
+                alert(data.res);
+                op_todo(id);
+            }
+        })
+}
+function pause_container(id, hostname) {
+    op_doing(id);
+    $.ajax({
+            url: '/docker/ajax_pause_container',
+            data: {'host': hostname, 'id':id},
+            type:'post',
+            success:function(data) {
+                window.location.reload();
+            },
+            error:function(data) {
+                alert(data.res);
+                op_todo(id);
+            }
+        })
+}
+</script>
+{%endblock right%}

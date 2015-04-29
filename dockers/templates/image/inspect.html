@@ -1,0 +1,79 @@
+{%extends 'base.html'%}
+{%block main%}
+<script type="text/javascript">
+    $(function(){
+        $("#f_i").attr('class', 'active');
+    })
+</script>
+{{msg}}<br>
+
+
+<div  role="form"  class="form-horizontal">
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">镜像ID</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="height:auto;min-height:34px">{{obj.Id}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">镜像名称</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="height:auto;min-height:34px">{{obj.repotag}}</span>
+        </div>
+    </div>
+    <!-- <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">SSh登录账户</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="height:auto;min-height:34px">{{obj.dbinfo.login_name}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">SSH登录密码</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="height:auto;min-height:34px">{{obj.dbinfo.login_pwd}}</span>
+        </div>
+    </div> -->
+
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">DockerVersion</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="height:auto;min-height:34px">{{obj.DockerVersion}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">父镜像ID</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="height:auto;min-height:34px">{{obj.Parent}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">Created</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="height:auto;min-height:34px">{{obj.Created}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">Architecture</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="height:auto;min-height:34px">{{obj.Architecture}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">Size</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="height:auto;min-height:34px">{{obj.VirtualSize|filesizeformat}}({{obj.Size|filesizeformat}})</span>
+        </div>
+    </div>
+    {%for conf in obj.Config.items%}
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">{{conf.0}}</label>
+        <div class="col-sm-9" >
+            <span class="form-control" style="height:auto;min-height:34px">{{conf.1}}</span>
+        </div>
+    </div>
+    {%endfor%}
+
+    
+    
+</div>
+{%endblock main%}

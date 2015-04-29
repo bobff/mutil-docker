@@ -1,0 +1,57 @@
+{%extends 'base.html'%}
+{%block main%}
+<script type="text/javascript">
+    $(function(){
+        $("#s_create").attr('class', 'active');
+    })
+</script>
+
+<form  role="form"  class="form-horizontal"  method="post" action="" onsubmit ="getElementById('submit_btn').disabled=true;getElementById('submit_btn').value='正在提交...';return true;">
+
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">tag</label>
+        <div class="col-sm-9">
+            <input name="tag" value="" class="form-control" style="display:inline;width:auto">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">dockerfile</label>
+        <div class="col-sm-9">
+            <textarea name="dockerfile" rows="10" cols="100" class="form-control" style="display:inline;width:auto"></textarea>
+        </div>
+    </div>
+   <!--  <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">supervisord</label>
+        <div class="col-sm-9">
+            <textarea name="supervisord" rows="10" cols="100" class="form-control" style="display:inline;width:auto">
+[supervisord]
+nodaemon=true
+
+[program:sshd]
+command=/usr/sbin/sshd -D
+
+#add another service#[program:hello]#command=/bin/bash -c "/root/test.sh"               
+            </textarea>
+        </div>
+    </div> -->
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">login name</label>
+        <div class="col-sm-9">
+            <input name="login_name" value="" class="form-control" style="display:inline;width:auto">
+        </div>
+    </div>    
+    <div class="form-group">
+        <label for="hostname" class="col-sm-2 control-label">login password</label>
+        <div class="col-sm-9">
+            <input name="login_pwd" value="" class="form-control" style="display:inline;width:auto">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content"  class="col-sm-2 control-label"></label>
+        <div class="col-sm-9">
+            <input id="submit_btn" class="form-control btn btn-primary" value="提交" type="submit" style="display:inline;width:auto"> 
+           
+        </div>
+    </div>
+</form>
+{%endblock main%}
